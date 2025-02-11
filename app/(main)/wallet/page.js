@@ -58,8 +58,6 @@ export default function Wallet() {
   console.log(depositAmt);
   console.log(spendAmt);
   
-  
-
   const handleShowDeposit = () => {
     setShowDeposit(true);
     setShowSpend(false);
