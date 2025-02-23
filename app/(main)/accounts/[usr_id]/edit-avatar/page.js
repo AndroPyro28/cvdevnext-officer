@@ -21,7 +21,7 @@ export default function EditAvatar() {
     // Fetch user data, properties, and transactions when usr_id is available
     useEffect(() => {
         if (usr_id) {
-            fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/users/${usr_id}`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/users/${usr_id}`)
                 .then((res) => res.json())
                 .then((data) => setUserData(data))
                 .catch((error) => console.error('Error fetching user data:', error));

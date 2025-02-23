@@ -27,7 +27,7 @@ export default function Dashboard() {
     if (status === 'authenticated') {
       // Determine the API URL based on the environment
       // Fetch data from the server
-      fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/datetime`)
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/datetime`)
         .then(response => response.json())
         .then(data => {
           const serverDateTime = DateTime.fromISO(data.datetime); // Parse the datetime from the server

@@ -27,7 +27,7 @@ export default function EditProperty() {
 
         
         // Make sure the endpoint matches your API route
-        fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/properties/${prop_id}`)
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties/${prop_id}`)
             .then((res) => res.json())
             .then((data) => setPropertyData(data))
             .catch((error) => console.error('Error fetching property data:', error));
