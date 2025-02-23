@@ -1,6 +1,5 @@
-import { Providers } from './providers';
-
 import "./globals.css";
+import Provider from './components/providers';
 
 export const metadata = {
   title: "CVConnect | Officer",
@@ -8,13 +7,14 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>
-        <Providers>
-          {children}
-        </Providers>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body>
+                <Provider>
+                    {children}
+                </Provider>
+            </body>
+        </html>
+    );
 }
+
