@@ -20,17 +20,11 @@ export default function Accounts() {
     const fetchTransactions = async () => {
       try {
         // Determine the API URL based on the environment
-        let apiUrl = 'http://localhost:5011'; // Default to localhost if no environment variable is set
+         // Default to localhost if no environment variable is set
 
-        if (process.env.NEXT_PUBLIC_URL_DEF === 'test') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_TEST;
-        } else if (process.env.NEXT_PUBLIC_URL_DEF === 'dev') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_DEV;
-        } else if (process.env.NEXT_PUBLIC_URL_DEF === 'production') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_PROD;
-        }
+        
 
-        const response = await fetch(`${apiUrl}/api/officer/transactions`); // Call your API
+        const response = await fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/transactions`); // Call your API
         const data = await response.json(); // Parse the JSON response
         setTransactionData(data); // Store the data in state
       } catch (error) {

@@ -32,17 +32,11 @@ export default function Wallet() {
     const fetchWallet = async () => {
       try {
         // Determine the API URL based on the environment
-        let apiUrl = 'http://localhost:5011'; // Default to localhost if no environment variable is set
+         // Default to localhost if no environment variable is set
 
-        if (process.env.NEXT_PUBLIC_URL_DEF === 'test') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_TEST;
-        } else if (process.env.NEXT_PUBLIC_URL_DEF === 'dev') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_DEV;
-        } else if (process.env.NEXT_PUBLIC_URL_DEF === 'production') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_PROD;
-        }
+        
 
-        const response = await fetch(`${apiUrl}/api/officer/wallet`); // Call your API
+        const response = await fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/wallet`); // Call your API
         const data = await response.json(); // Parse the JSON response
         setWalletData(data); // Store the data in state
         setWallHist(data.villwall_trn_hist);
@@ -77,20 +71,8 @@ export default function Wallet() {
     e.preventDefault();
     setIsProcessing(true);
     try {
-      let apiUrl = 'http://localhost:5021';
-
-      if (process.env.NEXT_PUBLIC_URL_DEF === 'test') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_TEST;
-      } else if (process.env.NEXT_PUBLIC_URL_DEF === 'dev') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_DEV;
-      } else if (process.env.NEXT_PUBLIC_URL_DEF === 'production') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_PROD;
-      }
-
-      console.log(apiUrl);
-      
-
-      const response = await fetch(`${apiUrl}/api/officer/wallet/deposit`, {
+        
+      const response = await fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/wallet/deposit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -118,17 +100,9 @@ export default function Wallet() {
     e.preventDefault();
     setIsProcessing(true);
     try {
-      let apiUrl = 'http://localhost:5021';
+        
 
-      if (process.env.NEXT_PUBLIC_URL_DEF === 'test') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_TEST;
-      } else if (process.env.NEXT_PUBLIC_URL_DEF === 'dev') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_DEV;
-      } else if (process.env.NEXT_PUBLIC_URL_DEF === 'production') {
-        apiUrl = process.env.NEXT_PUBLIC_URL_PROD;
-      }
-
-      const response = await fetch(`${apiUrl}/api/officer/wallet/spend`, {
+      const response = await fetch(`${process.env.NEXT_BACKEND_URL}/api/officer/wallet/spend`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
