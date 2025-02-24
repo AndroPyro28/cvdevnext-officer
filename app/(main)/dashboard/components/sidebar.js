@@ -14,7 +14,7 @@ import tranIcon from "@/public/svg/transactions_icon_d.svg";
 import votiIcon from "@/public/svg/voting_icon_d.svg";
 import annoIcon from "@/public/svg/announcements_icon_d.svg";
 
-export default function DashboardSidebar() {
+export default function TransactionsSidebar() {
     return (
         <div className={compstyle.main_sidebar_container}>
                 <div className={compstyle.sidebar_logo_div}>
@@ -28,7 +28,7 @@ export default function DashboardSidebar() {
                         <ul className={compstyle.navlist}>
                             <li>
                                 <Link href="/dashboard">
-                                    <div className={`${compstyle.navlist_item} ${compstyle.navlist_item_active}`}>
+                                    <div className={`${compstyle.navlist_item}`}>
                                         <div className={compstyle.navlist_item_ico}>
                                             <Image src={dashIcon} alt="Dashboard Icon" height={25} />
                                         </div>
@@ -72,7 +72,7 @@ export default function DashboardSidebar() {
 
                             <li>
                                 <Link href="/transactions">
-                                    <div className={`${compstyle.navlist_item}`}>
+                                    <div className={`${compstyle.navlist_item} ${compstyle.navlist_item_active}`}>
                                         <div className={compstyle.navlist_item_ico}>
                                             <Image src={tranIcon} alt="Transactions Icon" height={25} />
                                         </div>
@@ -110,7 +110,7 @@ export default function DashboardSidebar() {
 
 
                 <div className={compstyle.sidebar_ver_div}>
-                    <p className={compstyle.sidebar_ver}>OFFICER PORTAL v1.0.0</p>
+                    <p className={compstyle.sidebar_ver}>OFFCIER PORTAL v1.0.0</p>
                 </div>
             </div>
     )

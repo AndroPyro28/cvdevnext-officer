@@ -6,11 +6,13 @@ import { DateTime } from "luxon";
 
 // styles
 import dashboard from "./dashboard.module.css";
+import { useQueryProcessor } from '@/hooks/useTanstackQuery';
+import { formatToDecimal } from '@/lib/numberFormatter';
 
 // assets
 
 export default function Dashboard() {
-  const { data: session, status } = useSession();
+  const { data: session, status} = useSession();
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [initialDateTime, setInitialDateTime] = useState(null); // Store initial time from server  
@@ -26,8 +28,10 @@ export default function Dashboard() {
   useEffect(() => {
     if (status === 'authenticated') {
       // Determine the API URL based on the environment
+       
+
       // Fetch data from the server
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/datetime`)
+      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/datetime`)
         .then(response => response.json())
         .then(data => {
           const serverDateTime = DateTime.fromISO(data.datetime); // Parse the datetime from the server
@@ -56,8 +60,14 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, [initialDateTime]);
 
+  const {data, status:dashboardStatus} = useQueryProcessor({
+    url:`/admin/dashboard`,
+    key:['dashboard','admin'],
+  })
+
+
   // Show a loading state while authentication is being checked
-  if (status === "loading") {
+  if (status === "loading" || dashboardStatus === "pending") {
     return <p>Loading...</p>;
   }  
 
@@ -76,14 +86,30 @@ export default function Dashboard() {
         <div className={dashboard.main_stats_div}>
           <h6 className={dashboard.stats_head}>Total Collections for Month</h6>
           <div className={dashboard.stats_info_div}>
-            <h3 className={dashboard.stats_info}>No data to display...</h3>
+            <h3 className={dashboard.stats_info + ``}>{formatToDecimal(data.completed)}</h3>
           </div>
         </div>
 
         <div className={dashboard.main_stats_div}>
           <h6 className={dashboard.stats_head}>Remaining Collectibles</h6>
           <div className={dashboard.stats_info_div}>
-            <h3 className={dashboard.stats_info}>No data to display...</h3>
+            <h3 className={dashboard.stats_info}>{formatToDecimal(data.pending)}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div className={dashboard.main_content_row_div}>
+        <div className={dashboard.main_list_div}>
+          <h6 className={dashboard.list_head}>Village Reports</h6>
+          <div className={dashboard.list_info_div}>
+            <h6 className={dashboard.list_info}>No data to display...</h6>
+          </div>
+        </div>
+
+        <div className={dashboard.main_list_div}>
+          <h6 className={dashboard.list_head}>System Reports</h6>
+          <div className={dashboard.list_info_div}>
+            <h6 className={dashboard.list_info}>No data to display...</h6>
           </div>
         </div>
       </div>

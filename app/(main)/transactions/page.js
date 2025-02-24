@@ -10,34 +10,47 @@ import transactions from "./transactions.module.css";
 
 // components
 import TransactionItem from "./components/TransactionItem.js";
+import { useQueryProcessor } from "@/hooks/useTanstackQuery";
 
 
 export default function Accounts() {
-  const [transactionData, setTransactionData] = useState([]); // State to store the user data
+  // const [transactionData, setTransactionData] = useState([]); // State to store the user data
 
+
+  const {data: transactionData, status} = useQueryProcessor({
+    url:`/admin/transactions`,
+    key:['transactions'],
+    options: {
+      staleTime:0
+    }
+  })
   // Fetch data when the component is mounted
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        // Determine the API URL based on the environment
-         // Default to localhost if no environment variable is set
+  // useEffect(() => {
+  //   const fetchTransactions = async () => {
+  //     try {
+  //       // Determine the API URL based on the environment
+  //         // Default to localhost if no environment variable is set
 
-        
+  //       if (process.env.NEXT_PUBLIC_URL_DEF === 'test') {
+  //       apiUrl = process.env.NEXT_PUBLIC_URL_TEST;
+  //       } else if (process.env.NEXT_PUBLIC_URL_DEF === 'dev') {
+  //       apiUrl ;
+  //       } else if (process.env.NEXT_PUBLIC_URL_DEF === 'production') {
+  //       apiUrl = process.env.NEXT_PUBLIC_URL_PROD;
+  //       }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/transactions`); // Call your API
-        const data = await response.json(); // Parse the JSON response
-        setTransactionData(data); // Store the data in state
-      } catch (error) {
-        console.error('Error fetching users:', error); // Handle any errors
-      }
-    };
+  //       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/transactions`); // Call your API
+  //       const data = await response.json(); // Parse the JSON response
+  //       setTransactionData(data); // Store the data in state
+  //     } catch (error) {
+  //       console.error('Error fetching users:', error); // Handle any errors
+  //     }
+  //   };
 
-    fetchTransactions(); // Trigger the fetch when the component mounts
-  }, []); // The empty dependency array ensures this only runs on initial render
+  //   fetchTransactions(); // Trigger the fetch when the component mounts
+  // }, []); // The empty dependency array ensures this only runs on initial render
 
-  console.log(transactionData);
-  
-
+  if(status === "pending") return <div>loading...</div>
   return (
     <div className={transactions.main_content_container}>
 
@@ -73,10 +86,6 @@ export default function Accounts() {
             
           </div>
         </Link>
-
-        <Link href="/transactions/new-transaction" className={transactions.cta_newacc_btn}>
-          New Transaction
-        </Link>
       </div>
 
       <div className={transactions.main_list_container}>
@@ -103,7 +112,7 @@ export default function Accounts() {
         </div>
 
         {/* Check if users data is available and map through it */}
-        {transactionData.length > 0 ? (
+        {transactionData?.length > 0 ? (
           transactionData.map((transaction) => (
             <TransactionItem key={transaction._id} transInfo={transaction} />
           ))

@@ -3,7 +3,7 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import QueryProvider from "./query-provider";
 import ModalProvider from "./modal-provider";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 const Provider = ({ children }) => {
   return (
     <>
