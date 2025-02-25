@@ -10,7 +10,7 @@ import accounts from "../../accounts.module.css";
 import editprof from "./editprof.module.css";
 
 // assets
-import backBtn from '../../../../public/svg/backbtn.svg';
+import backBtn from '@/public/svg/backbtn.svg';
 
 export default function EditProfile() {
     const [userData, setUserData] = useState(null);

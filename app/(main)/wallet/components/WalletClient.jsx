@@ -142,7 +142,7 @@ export default function WalletClient({userId}) {
             </div>
           </div>
 
-          <div className={wallet.main_walletact_container}>
+          {/* <div className={wallet.main_walletact_container}>
             <p className={wallet.walletact_title}>Wallet Actions</p>
             <div className={wallet.walletact_cta_div}>
               <button className={wallet.walletact_cta_deposit_btn} onClick={handleShowDeposit}>
@@ -158,7 +158,7 @@ export default function WalletClient({userId}) {
                 </div>
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
 

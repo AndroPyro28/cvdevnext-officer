@@ -28,7 +28,7 @@ export default function TransactionsSidebar() {
                         <ul className={compstyle.navlist}>
                             <li>
                                 <Link href="/dashboard">
-                                    <div className={`${compstyle.navlist_item}`}>
+                                    <div className={`${compstyle.navlist_item} ${compstyle.navlist_item_active}`}>
                                         <div className={compstyle.navlist_item_ico}>
                                             <Image src={dashIcon} alt="Dashboard Icon" height={25} />
                                         </div>
@@ -72,7 +72,7 @@ export default function TransactionsSidebar() {
 
                             <li>
                                 <Link href="/transactions">
-                                    <div className={`${compstyle.navlist_item} ${compstyle.navlist_item_active}`}>
+                                    <div className={`${compstyle.navlist_item} `}>
                                         <div className={compstyle.navlist_item_ico}>
                                             <Image src={tranIcon} alt="Transactions Icon" height={25} />
                                         </div>

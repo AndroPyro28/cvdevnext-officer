@@ -14,6 +14,7 @@ import backBtn from '@/public/svg/backbtn.svg';
 
 // components
 import OtherCollectibleItem from "../../components/OtherCollectibleItem.js";
+import { uploadPhoto } from "@/lib/utils";
 
 export default function NewBillingStatement() {
     const [propertyData, setPropertyData] = useState(null);
@@ -25,6 +26,7 @@ export default function NewBillingStatement() {
     const [latestStatement, setLatestStatement] = useState(null);
     const [prevCollTotal, setPrevCollTotal] = useState(0);
 
+    const [waterProof, setWaterProof] = useState(null)
     const [waterConsump, setWaterConsump] = useState(0);
     const [waterCharges, setWaterCharges] = useState(0);
     const [waterRtApplied, setWaterRtApplied] = useState(0);
@@ -51,17 +53,19 @@ export default function NewBillingStatement() {
     const prop_id = params.prop_id; // Get prop_id from the URL  
     
     // Base API URL based on environment
+    
+     
     // Fetch property data, owner data, rates, and latest billing statement
     useEffect(() => {
         if (prop_id) {
             // Fetch property data
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties/${prop_id}`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/properties/${prop_id}`)
                 .then((res) => res.json())
                 .then((data) => {
                     setPropertyData(data);
                     // Fetch owner data if available
                     if (data.prop_owner_id) {
-                        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/users/${data.prop_owner_id}`)
+                        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/users/${data.prop_owner_id}`)
                             .then((res) => res.json())
                             .then((userData) => setOwnerData(userData))
                             .catch((error) => console.error('Error fetching owner data:', error));
@@ -70,31 +74,31 @@ export default function NewBillingStatement() {
                 .catch((error) => console.error('Error fetching property data:', error));
 
             // Fetch rates data from /settings/misc
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/settings/misc/hoa_rate`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/settings/misc/hoa_rate`)
                 .then((res) => res.json())
                 .then((data) => setHoaRates(data))
                 .catch((error) => console.error('Error fetching rates data:', error));
 
                 // Fetch rates data from /settings/misc
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/settings/misc/water_rate`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/settings/misc/water_rate`)
                 .then((res) => res.json())
                 .then((data) => setWaterRates(data))
                 .catch((error) => console.error('Error fetching rates data:', error));
 
             // Fetch rates data from /settings/misc
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/settings/misc/garb_rate`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/settings/misc/garb_rate`)
                 .then((res) => res.json())
                 .then((data) => setGarbRates(data))
                 .catch((error) => console.error('Error fetching rates data:', error));
 
             // Fetch latest billing statement for the property
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties/${prop_id}/latest_statement_water_consump`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/properties/${prop_id}/latest_statement_water_consump`)
                 .then((res) => res.json())
                 .then((data) => setPrevWaterRead(data))
                 .catch((error) => console.error('Error fetching latest billing statement:', error));
 
             // Fetch total billing statement for the property
-            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties/${prop_id}/statement_total`)
+            fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/properties/${prop_id}/statement_total`)
             .then((res) => res.json())
             .then((data) => setPrevCollTotal(data))
             .catch((error) => console.error('Error fetching latest billing statement:', error));
@@ -111,10 +115,11 @@ export default function NewBillingStatement() {
         }        
     }, [garbRates, hoaRates])
 
+    const parsedWaterRead = parseFloat(waterRead) || 0;
+    const parsedPrevWaterRead = parseFloat(prevWaterRead.bll_water_consump) || 0;
+
     // Effect to compute water rate when `waterRead`, `prevWaterRead`, or `waterRates` updates
     useEffect(() => {
-        const parsedWaterRead = parseFloat(waterRead) || 0;
-        const parsedPrevWaterRead = parseFloat(prevWaterRead) || 0;
 
         const consumption = parsedWaterRead - parsedPrevWaterRead;
         setWaterConsump(consumption > 0 ? consumption : 0); // Ensure no negative consumption
@@ -146,8 +151,8 @@ export default function NewBillingStatement() {
             }
             setWaterCharges(computedWaterRate);
             setWaterRtApplied(appliedRate); // Ensure the base rate is applied if no additional rate is used
-        }
-    }, [waterRead, prevWaterRead, waterRates]);
+        }        
+    }, [waterRead, prevWaterRead, waterRates]);    
 
     // Effect to calculate total for otherColl
     useEffect(() => {
@@ -178,7 +183,7 @@ export default function NewBillingStatement() {
     
         try {
             let uniqueId;
-            const fullUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties/get_collectible_id`;
+            const fullUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/properties/get_collectible_id`;
     
             // Retry fetching until a valid unique ID is returned
             do {
@@ -227,6 +232,13 @@ export default function NewBillingStatement() {
             setShowSummaryModal(false);
             // Set processing state
             setIsProcessing(true);
+
+            if (!waterProof) {
+                alert("Please upload a proof.");
+                return;
+            }
+                let imageUrl;
+                const {url} = await uploadPhoto(waterProof)
     
             // Prepare the data for the POST request
             const postData = {
@@ -238,10 +250,11 @@ export default function NewBillingStatement() {
                 billCovPeriod,
                 bll_water_cons_img: null, // Replace with file upload handling logic
                 otherColl,
-                totalBill
+                totalBill,
+                imageUrl:url
             };
     
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties/${prop_id}/new_billing_statement`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/properties/${prop_id}/new_billing_statement`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -628,7 +641,7 @@ export default function NewBillingStatement() {
                                     <div className={newbillstat.newbillstat_form_col}>
                                         <div className={newbillstat.newbillstat_formgroup_uploadinp_div}>
                                             <p className={newbillstat.newbillstat_formgroup_uploadinp_label}>Upload Proof of Water Billing</p>
-                                            <input className={newbillstat.newbillstat_formgroup_uploadinp} type="file" accept="image/*" />
+                                            <input className={newbillstat.newbillstat_formgroup_uploadinp} type="file" onChange={(e) => setWaterProof(e.target.files[0])} accept="image/*" />
                                         </div>
                                     </div>
                                 </div>

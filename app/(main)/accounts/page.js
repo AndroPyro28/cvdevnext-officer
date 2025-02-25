@@ -63,10 +63,6 @@ export default function Accounts() {
             
           </div>
         </Link>
-
-        <Link href="/accounts/new-account" className={accounts.cta_newacc_btn}>
-          New Account
-        </Link>
       </div>
 
       <div className={accounts.main_list_container}>

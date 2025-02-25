@@ -9,7 +9,7 @@ import { redirect } from 'next/navigation';
 import { Providers } from "../../providers.js";
 
 export const metadata = {
-  title: "CVConnect | Admin - Dashboard",
+  title: "CVConnect | Officer - Dashboard",
   description: "Integrated solutions for record management.",
 };
 

@@ -47,9 +47,7 @@ export default function DashboardHeader(props) {
                 <div className={compstyle.header_dropdown_div}>
                     <div className={compstyle.header_dropdown_content}>
                         <ul className={compstyle.dropdown_items}>
-                        <li>
-                                <Link href="/profile">Profile</Link>
-                            </li>
+                        
                             <li>
                                 <Link href="/settings">Settings</Link>
                             </li>

@@ -21,11 +21,11 @@ export default function Properties() {
     const fetchProperties = async () => {
       try {
         // Determine the API URL based on the environment
-         // Default to localhost if no environment variable is set
+          // Default to localhost if no environment variable is set
 
         
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/officer/properties`); // Call your API
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/properties`); // Call your API
         const data = await response.json(); // Parse the JSON response
         setProperties(data); // Store the data in state
       } catch (error) {
