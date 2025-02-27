@@ -10,7 +10,7 @@ import accounts from "../../accounts.module.css";
 import editavat from "./editavat.module.css";
 
 // assets
-import backBtn from '../../../../public/svg/backbtn.svg';
+import backBtn from '@/public/svg/backbtn.svg';
 
 export default function EditAvatar() {
     const [userData, setUserData] = useState(null);
