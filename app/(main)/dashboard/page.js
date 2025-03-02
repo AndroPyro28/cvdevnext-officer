@@ -8,6 +8,8 @@ import { DateTime } from "luxon";
 import dashboard from "./dashboard.module.css";
 import { useQueryProcessor } from '@/hooks/useTanstackQuery';
 import { formatToDecimal } from '@/lib/numberFormatter';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 // assets
 
@@ -64,13 +66,28 @@ export default function Dashboard() {
     url:`/admin/dashboard`,
     key:['dashboard','admin'],
   })
-
-
+  const monthMapping = {
+    "01": "January",
+    "02": "february",
+    "03": "march",
+    "04": "april",
+    "05": "may",
+    "06": "june",
+    "07": "july",
+    "08": "august",
+    "09": "september",
+    "10": "october",
+    "11": "november",
+    "12": "december",
+  };
+  const router = useRouter()
   // Show a loading state while authentication is being checked
   if (status === "loading" || dashboardStatus === "pending") {
     return <p>Loading...</p>;
   }  
 
+  const month = (new Date().getMonth() +1) > 9 ? monthMapping[`${(new Date().getMonth() + 1)}`] : monthMapping[`0${(new Date().getMonth() + 1)}`]
+  const year = new Date().getFullYear()
   // The user should be authenticated at this point
   // You can proceed to render the dashboard UI
   return (
@@ -80,38 +97,53 @@ export default function Dashboard() {
           Welcome {session.user.username}!
         </h3>
         <h6 className={dashboard.hero_info}>{date} | {time}</h6>
+        <h6 className={`ml-14 -mt-10 mb-5`}>Here's a rundown for {month} {year}</h6>
       </div>
 
       <div className={dashboard.main_content_row_div}>
         <div className={dashboard.main_stats_div}>
-          <h6 className={dashboard.stats_head}>Total Collections for Month</h6>
+          <h6 className={dashboard.stats_head}>Total Collections for Month </h6>
           <div className={dashboard.stats_info_div}>
-            <h3 className={dashboard.stats_info + ``}>{formatToDecimal(data.completed)}</h3>
+            <h3 className={dashboard.stats_info + ``}>{formatToDecimal(data?.totalCollection.completed)}</h3>
           </div>
         </div>
 
         <div className={dashboard.main_stats_div}>
           <h6 className={dashboard.stats_head}>Remaining Collectibles</h6>
           <div className={dashboard.stats_info_div}>
-            <h3 className={dashboard.stats_info}>{formatToDecimal(data.pending)}</h3>
+            <h3 className={dashboard.stats_info}>{formatToDecimal(data?.totalCollection.pending)}</h3>
           </div>
         </div>
       </div>
 
+      <div className='bg-white rounded-[25px] px-7 py-5 w-[98%] mx-auto flex items-center justify-between'>
+        <span className='font-semibold'>Pending Transactions ({data?.noOfPendingTransaction})</span>
+        <Button onClick={() => router.push('/transactions')} >View Transactions</Button>
+      </div>
+
+
       <div className={dashboard.main_content_row_div}>
-        <div className={dashboard.main_list_div}>
-          <h6 className={dashboard.list_head}>Village Reports</h6>
-          <div className={dashboard.list_info_div}>
-            <h6 className={dashboard.list_info}>No data to display...</h6>
+        <div className={dashboard.main_stats_div}>
+          <h6 className={dashboard.stats_head}>Total Hoa Due Collection </h6>
+          <div className={dashboard.stats_info_div}>
+            <h3 className={dashboard.stats_info + ``}>{formatToDecimal(data?.totalCollection.hoa)}</h3>
           </div>
         </div>
 
-        <div className={dashboard.main_list_div}>
-          <h6 className={dashboard.list_head}>System Reports</h6>
-          <div className={dashboard.list_info_div}>
-            <h6 className={dashboard.list_info}>No data to display...</h6>
+        <div className={dashboard.main_stats_div}>
+          <h6 className={dashboard.stats_head}>Total Water Due Collection </h6>
+          <div className={dashboard.stats_info_div}>
+            <h3 className={dashboard.stats_info}>{formatToDecimal(data?.totalCollection.water)}</h3>
           </div>
         </div>
+
+        <div className={dashboard.main_stats_div}>
+          <h6 className={dashboard.stats_head}>Total Wallet Incoming </h6>
+          <div className={dashboard.stats_info_div}>
+            <h3 className={dashboard.stats_info}>{formatToDecimal(data?.totalWalletCollectionsThisMonth)}</h3>
+          </div>
+        </div>
+
       </div>
     </div>
   );
