@@ -10,6 +10,7 @@ export default async function UserLayout({
       return redirect("/")
     }
 
+
   return (
     <html lang="en">
       <body >
